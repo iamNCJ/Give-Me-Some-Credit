@@ -6,14 +6,8 @@
                 dark
         >
             <div class="d-flex align-center">
-                <v-img
-                        alt="Vuetify Logo"
-                        class="shrink mr-2"
-                        contain
-                        src="https://cdn.vuetifyjs.com/images/logos/vuetify-logo-dark.png"
-                        transition="scale-transition"
-                        width="40"
-                />
+                <v-icon large >mdi-finance</v-icon>
+                <v-toolbar-title>Model Demo</v-toolbar-title>
             </div>
 
             <v-spacer></v-spacer>
@@ -48,7 +42,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center"
-                                  hide-details label="NumberOfTime30-59DaysPastDueNotWorse"
+                                  hide-details label="Number Of Time 30-59 Days Past Due Not Worse"
                                   v-model="NumberOfTime30_59DaysPastDueNotWorse">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -61,7 +55,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center" hide-details
-                                  label="DebtRatio"
+                                  label="Debt Ratio"
                                   v-model="DebtRatio">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -73,7 +67,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center" hide-details
-                                  label="MonthlyIncome"
+                                  label="Monthly Income"
                                   v-model="MonthlyIncome">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -85,7 +79,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center"
-                                  hide-details label="NumberOfOpenCreditLinesAndLoans"
+                                  hide-details label="Number Of Open Credit Lines And Loans"
                                   v-model="NumberOfOpenCreditLinesAndLoans">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -97,7 +91,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center"
-                                  hide-details label="NumberOfTimes90DaysLate"
+                                  hide-details label="Number Of Times 90 Days Late"
                                   v-model="NumberOfTimes90DaysLate">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -109,7 +103,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center"
-                                  hide-details label="NumberRealEstateLoansOrLines"
+                                  hide-details label="Number Real Estate Loans Or Lines"
                                   v-model="NumberRealEstateLoansOrLines">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -124,7 +118,7 @@
                         <v-slider
                                 class="align-center"
                                 hide-details
-                                label="NumberOfTime60-89DaysPastDueNotWorse"
+                                label="Number Of Time 60-89 Days Past Due Not Worse"
                                 v-model="NumberOfTime60_89DaysPastDueNotWorse"
                         >
                             <template v-slot:append>
@@ -143,7 +137,7 @@
                 <v-row>
                     <v-col class="pr-4">
                         <v-slider @input="rerender" class="align-center" hide-details
-                                  label="NumberOfDependents"
+                                  label="Number Of Dependents"
                                   v-model="NumberOfDependents">
                             <template v-slot:append>
                                 <v-text-field class="mt-0 pt-0" hide-details single-line style="width: 60px"
@@ -153,7 +147,9 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <v-progress-linear height="25" :value="result"></v-progress-linear>
+            <v-progress-linear height="25" :value="result" :color="color">
+                <strong>Risk {{ (this.result - 50) * 2 }}%</strong>
+            </v-progress-linear>
         </v-main>
     </v-app>
 </template>
@@ -178,7 +174,8 @@
             NumberRealEstateLoansOrLines: 8,
             NumberOfTime60_89DaysPastDueNotWorse: 9,
             NumberOfDependents: 30,
-            result: null
+            result: 50,
+            color: "blue"
         }),
 
         methods: {
@@ -188,6 +185,15 @@
                     this.NumberOfTime60_89DaysPastDueNotWorse, this.NumberOfDependents];
                 console.log(features);
                 this.result = _predict(features) * 50 + 50;
+                if (this.result > 75) {
+                    this.color = "red"
+                } else if (this.result > 50) {
+                    this.color = "amber"
+                } else if (this.result == 50) {
+                    this.color = "blue"
+                } else {
+                    this.color = "green"
+                }
             }
         }
 
