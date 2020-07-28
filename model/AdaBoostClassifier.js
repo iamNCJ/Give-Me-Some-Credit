@@ -2674,7 +2674,8 @@ var AdaBoostClassifier = function() {
             }
         }
     
-        return findMax(classes);
+        // return findMax(classes);
+        return classes[0] * 0.03;
     };
 };
 
