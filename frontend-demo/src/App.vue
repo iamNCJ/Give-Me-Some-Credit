@@ -189,7 +189,7 @@
                     this.color = "red"
                 } else if (this.result > 50) {
                     this.color = "amber"
-                } else if (this.result == 50) {
+                } else if (this.result === 50) {
                     this.color = "blue"
                 } else {
                     this.color = "green"
