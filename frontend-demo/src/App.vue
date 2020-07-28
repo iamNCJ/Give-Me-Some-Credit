@@ -153,7 +153,7 @@
                     </v-col>
                 </v-row>
             </v-card-text>
-            <v-progress-linear :value="result"></v-progress-linear>
+            <v-progress-linear height="25" :value="result"></v-progress-linear>
         </v-main>
     </v-app>
 </template>
