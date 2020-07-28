@@ -2674,8 +2674,7 @@ var AdaBoostClassifier = function() {
             }
         }
     
-        // return findMax(classes);
-        return classes[0] * 0.03;
+        return findMax(classes);
     };
 };
 
@@ -2684,7 +2683,6 @@ if (typeof process !== 'undefined' && typeof process.argv !== 'undefined') {
 
         // Features:
         var features = process.argv.slice(2);
-        console.log(features);
 
         // Prediction:
         var clf = new AdaBoostClassifier();
