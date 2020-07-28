@@ -1,13 +1,4 @@
 var AdaBoostClassifier = function() {
-
-    var findMax = function(nums) {
-        var index = 0;
-        for (var i = 0; i < nums.length; i++) {
-            index = nums[i] > nums[index] ? i : index;
-        }
-        return index;
-    };
-
     var forest = new Array();
 
     forest.push(function(features) {
@@ -2639,7 +2630,7 @@ var AdaBoostClassifier = function() {
         var preds = new Array(n_estimators);
         var n_classes = 2;
         var classes = new Array(n_classes).fill(0.);
-        var normalizer, sum, idx, val;
+        var normalizer, sum;
         var i, j;
     
         for (i = 0; i < n_estimators; i++) {
@@ -2679,17 +2670,24 @@ var AdaBoostClassifier = function() {
     };
 };
 
-if (typeof process !== 'undefined' && typeof process.argv !== 'undefined') {
-    if (process.argv.length - 2 === 11) {
-
-        // Features:
-        var features = process.argv.slice(2);
-        console.log(features);
-
-        // Prediction:
-        var clf = new AdaBoostClassifier();
-        var prediction = clf.predict(features);
-        console.log(prediction);
-
-    }
+export default function _predict(features) {
+    // Prediction:
+    var clf = new AdaBoostClassifier();
+    var prediction = clf.predict(features);
+    console.log(prediction);
+    return prediction;
 }
+
+// if (typeof process !== 'undefined' && typeof process.argv !== 'undefined') {
+//     if (process.argv.length - 2 === 11) {
+//
+//         // Features:
+//         var features = process.argv.slice(2);
+//
+//         // Prediction:
+//         var clf = new AdaBoostClassifier();
+//         var prediction = clf.predict(features);
+//         console.log(prediction);
+//
+//     }
+// }
