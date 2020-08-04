@@ -2,9 +2,21 @@
 
 ## 1. 选题
 
+
+
 ## 2. 研究背景与意义
 
+Give Me Some Credit是2011年9月在Kaggle上举办的一个特征预测比赛，它给出了25万名借款人的历史数据，参赛者需要预测特定的借款人在接下来的两年内是否会遇到经济压力导致无法偿还借款。
+
+本次比赛的主题为风险控制，所谓风险控制，就是评估用户可能违约的情况，降低金融风险。传统的风控技术依赖有经验的风险分析专家设计信用判断条件，或依赖回归分析等统计技术。而随着客户数目的增多，风险评估的人力成本上升，且随着大数据时代的到来，大量的数据可以被计算机有效的分析，因此利用机器学习等手段的风控技术得到了推广，本次比赛正是在此背景下举办的一场机器学习风控比赛。
+
+机器学习技术的引入能够多维地评价用户的信用等级，从而降低风险等级，同时节省了评估成本，因而具有重要的意义。
+
 ## 3. 国内外研究现状与存在问题
+
+Give Me Some Credit比赛已于2011年12月结束，根据Kaggle公布的数据，目前公开排行榜前三名队伍模型的AUC值分别为0.86390、0.86370以及0.86364；私人排行榜前三名队伍模型的AUC值分别为0.86955、0.86929以及0.86928 。
+
+参赛队伍的成绩区分度不高，公开排行榜约83%的参赛队伍模型的AUC值均在0.8以上，同时最高分数也没有超过0.9，这说明设计一个较为优秀的模型的难度不大，但由于数据集的性质导致预测准确率无法达到很高的水平。
 
 ## 4. 研究目标与研究内容
 
@@ -99,3 +111,11 @@
 ## 8. 结论与展望
 
 ## 9. 参考文献
+
+Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
+
+Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
+
+Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
+
+Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
