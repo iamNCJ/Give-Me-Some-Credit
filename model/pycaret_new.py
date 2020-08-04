@@ -13,11 +13,11 @@ if __name__ == '__main__':
     # compare all baseline models and select top 5
     top5 = compare_models(n_select=5)
     # tune top 5 base models
-    tuned_top5 = [tune_model(i) for i in top5]
+    tuned_top5 = [tune_model(i, optimize='AUC') for i in top5]
     # ensemble top 5 tuned models
-    bagged_top5 = [ensemble_model(i) for i in tuned_top5]
+    bagged_top5 = [ensemble_model(i, optimize='AUC') for i in tuned_top5]
     # blend top 5 base models
-    blender = blend_models(estimator_list=top5)
+    blender = blend_models(estimator_list=top5, optimize='AUC')
     # select best model
     best = automl(optimize='AUC')
     # finalize model

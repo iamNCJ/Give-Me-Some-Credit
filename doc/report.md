@@ -128,28 +128,30 @@ clf1 = setup(data=data, target='SeriousDlqin2yrs', numeric_features=['NumberOfTi
 
 ```python
 # compare all baseline models and select top 5
-top3 = compare_models(n_select=5)
+top5 = compare_models(n_select=5, sort='AUC', turbo=False)
 ```
+
+默认情况下，面对分类问题 `pycaret` 会选取准确度作为排序指标，因此我们需要手工指定将 AUC 作为指标。另外 `pycaret` 会自动跳过需要较长训练时间的模型（即启用 `turbo`），在这里为了拟合效果我们也要在参数中关闭 `turbo` ，来获得尽可能好的效果。
 
 基准测试结果如下：
 
-|      | Model                           | Accuracy | AUC    | Recall | Prec.  | F1     | Kappa  | MCC    | TT (Sec) |
-| :--- | :------------------------------ | :------- | :----- | :----- | :----- | :----- | :----- | :----- | -------- |
-| 0    | Light Gradient Boosting Machine | 0.9366   | 0.8612 | 0.2324 | 0.5636 | 0.3288 | 0.3016 | 0.3347 | 1.3332   |
-| 1    | Extreme Gradient Boosting       | 0.9365   | 0.8564 | 0.2191 | 0.5648 | 0.3156 | 0.2890 | 0.3252 | 13.3978  |
-| 2    | CatBoost Classifier             | 0.9365   | 0.8597 | 0.2194 | 0.5634 | 0.3157 | 0.2891 | 0.3250 | 10.6648  |
-| 3    | Random Forest Classifier        | 0.9311   | 0.7875 | 0.2288 | 0.4681 | 0.3074 | 0.2756 | 0.2953 | 0.5138   |
-| 4    | Extra Trees Classifier          | 0.9306   | 0.8331 | 0.2954 | 0.4694 | 0.3625 | 0.3278 | 0.3377 | 2.3267   |
-| 5    | Gradient Boosting Classifier    | 0.9297   | 0.8545 | 0.3344 | 0.4640 | 0.3886 | 0.3523 | 0.3577 | 25.6528  |
-| 6    | Ada Boost Classifier            | 0.9161   | 0.8412 | 0.4335 | 0.3863 | 0.4083 | 0.3633 | 0.3641 | 5.6550   |
-| 7    | Naive Bayes                     | 0.9090   | 0.7019 | 0.1141 | 0.4478 | 0.1202 | 0.0978 | 0.1553 | 0.0248   |
-| 8    | Decision Tree Classifier        | 0.8909   | 0.6086 | 0.2826 | 0.2361 | 0.2572 | 0.1989 | 0.1998 | 0.7828   |
-| 9    | Logistic Regression             | 0.8656   | 0.8110 | 0.5742 | 0.2662 | 0.3636 | 0.2997 | 0.3275 | 0.8013   |
-| 10   | SVM - Linear Kernel             | 0.8417   | 0.0000 | 0.2052 | 0.1615 | 0.1138 | 0.0602 | 0.0814 | 0.4746   |
-| 11   | Quadratic Discriminant Analysis | 0.7871   | 0.7876 | 0.6622 | 0.2124 | 0.3158 | 0.2384 | 0.2891 | 0.0398   |
-| 12   | K Neighbors Classifier          | 0.7497   | 0.5970 | 0.3668 | 0.1055 | 0.1638 | 0.0669 | 0.0851 | 0.2495   |
-| 13   | Ridge Classifier                | 0.6538   | 0.0000 | 0.6247 | 0.1151 | 0.1943 | 0.0918 | 0.1457 | 0.0359   |
-| 14   | Linear Discriminant Analysis    | 0.6538   | 0.6966 | 0.6247 | 0.1151 | 0.1943 | 0.0918 | 0.1457 | 0.1364   |
+| | Model | Accuracy                        | AUC    | Recall | Prec.  | F1     | Kappa  | MCC    | TT (Sec) |
+| :---- | :------------------------------ | :----- | :----- | :----- | :----- | :----- | :----- | :------- | ------- |
+| 0     | Light Gradient Boosting Machine | 0.9363 | 0.8616 | 0.2296 | 0.5571 | 0.3251 | 0.2977 | 0.3303   | 1.4324  |
+| 1     | CatBoost Classifier             | 0.9351 | 0.8599 | 0.2050 | 0.5381 | 0.2969 | 0.2700 | 0.3050   | 12.8907 |
+| 2     | Extreme Gradient Boosting       | 0.9350 | 0.8555 | 0.2059 | 0.5370 | 0.2975 | 0.2704 | 0.3052   | 13.5667 |
+| 3     | Gradient Boosting Classifier    | 0.9292 | 0.8541 | 0.3349 | 0.4600 | 0.3875 | 0.3510 | 0.3560   | 26.8174 |
+| 4     | Ada Boost Classifier            | 0.9164 | 0.8404 | 0.4333 | 0.3883 | 0.4093 | 0.3645 | 0.3653   | 5.8531  |
+| 5     | Extra Trees Classifier          | 0.9293 | 0.8304 | 0.2865 | 0.4543 | 0.3512 | 0.3158 | 0.3253   | 2.5105  |
+| 6     | Logistic Regression             | 0.8553 | 0.8073 | 0.5831 | 0.2557 | 0.3541 | 0.2877 | 0.3189   | 0.8100  |
+| 7     | Quadratic Discriminant Analysis | 0.8282 | 0.7916 | 0.6281 | 0.2365 | 0.3391 | 0.2678 | 0.3102   | 0.0399  |
+| 8     | Random Forest Classifier        | 0.9298 | 0.7887 | 0.2196 | 0.4494 | 0.2948 | 0.2624 | 0.2813   | 0.5340  |
+| 9     | Naive Bayes                     | 0.9331 | 0.7082 | 0.0578 | 0.4936 | 0.1026 | 0.0901 | 0.1501   | 0.0250  |
+| 10    | Linear Discriminant Analysis    | 0.6524 | 0.6983 | 0.6248 | 0.1146 | 0.1937 | 0.0910 | 0.1449   | 0.1400  |
+| 11    | Decision Tree Classifier        | 0.8913 | 0.6104 | 0.2851 | 0.2383 | 0.2596 | 0.2014 | 0.2024   | 0.7692  |
+| 12    | K Neighbors Classifier          | 0.7514 | 0.5961 | 0.3651 | 0.1059 | 0.1641 | 0.0675 | 0.0855   | 0.2557  |
+| 13    | SVM - Linear Kernel             | 0.6688 | 0.0000 | 0.3427 | 0.2153 | 0.0903 | 0.0405 | 0.0619   | 0.5085  |
+| 14    | Ridge Classifier                | 0.6524 | 0.0000 | 0.6248 | 0.1146 | 0.1937 | 0.0910 | 0.1449   | 0.0355  |
 
 可以看出，`Light Gradient Boosting Machine`， `Extreme Gradient Boosting`, `CatBoost Classifier` 等模型同时拥有较好的准确度表现和AUC指标，因此我们选取他们来做进一步的优化。
 
@@ -159,11 +161,11 @@ top3 = compare_models(n_select=5)
 
 ```python
 # tune top 5 base models
-tuned_top5 = [tune_model(i) for i in top5]
+tuned_top5 = [tune_model(i, optimize='AUC') for i in top5]
 # ensemble top 5 tuned models
-bagged_top5 = [ensemble_model(i) for i in tuned_top5]
+bagged_top5 = [ensemble_model(i, optimize='AUC') for i in tuned_top5]
 # blend top 5 base models
-blender = blend_models(estimator_list=top5)
+blender = blend_models(estimator_list=top5, optimize='AUC')
 # select best model
 best = automl(optimize='AUC')
 ```
@@ -172,7 +174,65 @@ best = automl(optimize='AUC')
 
 #### 7.3.1 超参数调节
 
-众所周知，一个模型的超参数对于模型的拟合效果有着重要的影响。`tune_modal()` 可以自动调整模型的超参数，
+众所周知，一个模型的超参数对于模型的拟合效果有着重要的影响。`tune_modal()` 可以自动调整模型的超参数，它使用随机漫步，在默认值周围随机选取10组参数进行训练，并选择指定指标最好的一组（比如在这里就是 AUC 分数最高的一组）最为最终参数。当然，选取的组合数量越多，效果肯定越好，所以当最后确定了模型种类之后，可以增加组合数量进行精细调节。
+
+相关代码如下：
+
+```python
+# tune top 5 base models
+tuned_top5 = [tune_model(i, optimize='AUC') for i in top5]
+```
+
+#### 7.3.2 集成学习
+
+使用集成学习可以让我们紧紧借助简单的模型组合出更为精准的模型。其核心策略就是将已有模型进行组装，从而得到效果更好的模型。常见的策略有 Bagging 和 Boosting，这里我们使用 Bagging 策略，来组合出效果更好的模型。
+
+```python
+# ensemble top 5 tuned models
+bagged_top5 = [ensemble_model(i, optimize='AUC') for i in tuned_top5]
+```
+
+#### 7.3.3 混合模型
+
+混合模型引入了“共识”的机制，采用表决的方法来综合多个模型的预测结果、分配不同模型相应的权值，并获得最后的概率。使用混合模型能够将我们之前的各个模型融合在一起，`pycaret` 中内置了相关的实现，我们直接调用就好。
+
+```python
+# blend top 5 base models
+blender = blend_models(estimator_list=top5, optimize='AUC')
+```
+
+#### 7.3.4 选取最优
+
+在前面的各个步骤中，我们产生了大量的中间模型。`pycaret` 自动帮我们记录了所有的模型，并引入 AutoML 的接口，能够从所有训练得到的模型中选取效果最好的那个。
+
+```python
+# select best model
+best = automl(optimize='AUC')
+```
+
+### 7.4 可视化模型
+
+为了对我们获得的模型有一个直观、感性的认识，我们对模型进行可视化。
+
+#### 7.4.1 AUC 曲线
+
+
+
+#### 7.4.2 特征重要性
+
+
+
+### 7.5 精修模型
+
+
+
+### 7.6 进行预测
+
+
+
+### 7.7 模型部署
+
+Vue
 
 ## 8. 结论与展望
 
