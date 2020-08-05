@@ -104,9 +104,9 @@ clf1 = setup(data=data, target='SeriousDlqin2yrs', numeric_features=['NumberOfTi
 这一步有几个需要注意的地方：
 
 1. 首先，我们需要拟合的目标是 `SeriousDlqin2yrs` ，因此需要在 `target` 参数中对其进行指定。
-2. 其次，`pycaret` 会自动填充非空值，**其默认策略是对数值特征使用均值，对类别标签使用 `"const"` 类别，**由于我们的数据只有数值类型，并且我们期望的行为就是直接使用均值进行填充，因此我们不需要对其进行修改。当然，如果需要修改，也可以使用 `numeric_imputation` ， `categorical_imputation` 两个参数进行修改，非常方便。
+2. 其次，`pycaret` 会自动填充非空值，其默认策略是对数值特征使用均值，对类别标签使用 `"const"` 类别，由于我们的数据只有数值类型，并且我们期望的行为就是直接使用均值进行填充，因此我们不需要对其进行修改。当然，如果需要修改，也可以使用 `numeric_imputation` ， `categorical_imputation` 两个参数进行修改，非常方便。
 3. 一开始自动识别的类型中，有 `NumberOfTime30-59DaysPastDueNotWorse`, `NumberOfTimes90DaysLate`, `NumberOfTime60-89DaysPastDueNotWorse`, `NumberOfDependents` 四个类型被错误地识别为了类别编码，因此我们需要手动指定他们的类型，使用 `numeric_features` 参数即可完成。
-4. 最后，前面注意到了我们的数据存在严重的类别失衡，因此我们需要对数据进行修复。常见的操作是进行欠采样和过采样，**但是 `pycaret` 提供了一个更为先进的方法 SMOTE** (Synthetic Minority Over-sampling Technique) 。相较于简单的过采样， SMOTE降低了过拟合风险，对于噪音的抵抗性也更强。不过缺点也是存在的，比如运算开销加大，同时可能会生成一些“可疑的点”。不过总体而言效果优点还是远大于缺点的。另外，因为 `pycaret` 的 SMOTE 利用的是 `imblearn` 这个库，因此这个库中其他支持 `fit_resample` 方法的模块都可以被使用，非常智能。
+4. 最后，前面注意到了我们的数据存在严重的类别失衡，因此我们需要对数据进行修复。常见的操作是进行欠采样和过采样，但是 `pycaret` 提供了一个更为先进的方法 SMOTE (Synthetic Minority Over-sampling Technique) 。相较于简单的过采样， SMOTE降低了过拟合风险，对于噪音的抵抗性也更强。不过缺点也是存在的，比如运算开销加大，同时可能会生成一些“可疑的点”。不过总体而言效果优点还是远大于缺点的。另外，因为 `pycaret` 的 SMOTE 利用的是 `imblearn` 这个库，因此这个库中其他支持 `fit_resample` 方法的模块都可以被使用，非常智能。
 
 ### 6.4.2 数据集划分
 
@@ -212,11 +212,25 @@ blender = blend_models(estimator_list=top5, optimize='AUC')
 best = automl(optimize='AUC')
 ```
 
-
-
 ## 7.4 精修模型
 
+### 7.4.1 校准模型
 
+我们刚刚训练的模型是针对分类问题的，但是实际上为了获得更好的 AUC 分数我们需要对模型预测的概率（置信度）进行精细校准。使用 `pycaret` 中的 `calibrate_model()` 方法，就会自动调用 `sklearn` 中的相关方法，生成一个校准过后的 `CalibratedClassifierCV` 模型。
+
+```python
+# calibrate
+calibrated_best = calibrate_model(best, verbose=False)
+```
+
+### 7.4.2 完善模型
+
+前面的所有 AutoML 训练都是在 30% 的数据集上进行的，目的是加快训练速度以及避免过拟合。但是在交付模型前，我们还是希望在完整的数据集上进行训练。使用 `pycaret` 中的 `finalize_model()` 方法
+
+```python
+# finalize model
+final_clf = finalize_model(best)
+```
 
 ## 7.5 可视化模型
 
