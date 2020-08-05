@@ -83,11 +83,7 @@ plt.savefig('heatmap')
 
 可以看出大部分特征之间是无关的，只有少数几个特征之间存在相关性，因此我们不对其进行单独的处理。
 
-## 6.4 模型基准测试
-
-简单对数据进行分析之后，我们使用主流模型的默认参数来对这些数据进行基准测试。
-
-原先我们使用了一批sklearn中的模型来测试AUC等指标，**但是刚刚发布的 `pycaret` 2.0 版本包含了更加丰富的功能，因此我们使用这个库对我们的代码进行了重构。**
+## 6.4 数据准备工作
 
 ### 6.4.1 数据预处理
 
@@ -126,7 +122,9 @@ clf1 = setup(data=data, target='SeriousDlqin2yrs', numeric_features=['NumberOfTi
 
 ## 7.2 对比模型基准性能
 
-在 `pycaret` 中，我们可以直接使用 `compare_models` 方法进行基准测试，并选取效果最好（即 AUC 指标最高）的几个模型来进行下一步的调整。
+简单对数据进行分析之后，我们使用主流模型的默认参数来对这些数据进行基准测试。
+
+原先我们使用了一批sklearn中的模型来测试AUC等指标，**但是刚刚发布的 `pycaret` 2.0 版本包含了更加丰富的功能，因此我们使用这个库对我们的代码进行了重构。**在 `pycaret` 中，我们可以直接使用 `compare_models` 方法进行基准测试，并选取效果最好（即 AUC 指标最高）的几个模型来进行下一步的调整。
 
 ```python
 # compare all baseline models and select top 5
@@ -336,16 +334,70 @@ submission.to_csv('submission_pycaret_automl.csv', index=False)
 
 ## 7.8 模型部署
 
-Vue sklearn-porter
+最后我们来尝试对模型进行“落地”工作，即尝试简单部署一个基于Web的模型推理工具，能够实时的针对输入的用户数据，给出相应的风险评估。
+
+### 7.8.1 模型导出
+
+为了做到实时，我们选择将模型直接到处到网页的 js 中，而这需要我们对模型进行简化——太过复杂的模型不仅会增加网页的大小、拖慢打开速度，还会造成较为严重的性能问题。同时，还要考虑能否简单快速的从现有模型中导出——毕竟手写一个推理实例工作量太大了。
+
+很快我们找到了一个名为 `sklearn-porter` 的库，它能够将一些简单的 sklearn 模型的推理功能，输出到支持的语言中，进行直接部署。我们对照着 js 中支持的语言和前面的基准测试结果，选定使用 `Ada Boost Classifier` 作为我们部署阶段的分类器。
+
+```python
+from sklearn.tree import DecisionTreeClassifier
+base_estimator = DecisionTreeClassifier(max_depth=4, random_state=0)
+gbc_clf = sklearn.ensemble.AdaBoostClassifier(base_estimator=base_estimator, n_estimators=32,
+                         random_state=0, learning_rate=0.1)
+gbc_clf.fit(X_train, y_train)
+gbc_clf_scores = gbc_clf.predict_proba(X_train)[:, 1]
+fpr_gbc, tpr_gbc, thres_gbc = roc_curve(y_train, gbc_clf_scores)
+plot_roc_curve(fpr_gbc, tpr_gbc)
+print ('AUC Score:', roc_auc_score(y_train, gbc_clf_scores))
+```
+
+通过简单的训练，我们得到了一个 AUC 为 0.85664 的模型，虽然比不上之前那个更为复杂的模型的效果，但是作为部署使用还是足够了的。
+
+接着我们使用 `porter` 将这个模型导出到 js：
+
+```python
+from sklearn_porter import Porter
+
+porter = Porter(gbc_clf, language='js')
+output = porter.export(embed_data=True)
+
+with open('AdaBoostClassifier.js', 'w') as f:
+    f.write(output)
+```
+
+这样我们就得到了一个可能用来预测推理的模型代码了。
+
+### 7.8.2 Web 整合
+
+我们使用 Vue + Vuetify 构建了一个简单的 Web 界面，其上半部分由10个特征的输入模块组成，下半部分会实时计算并输出预测的风险值，并通过颜色变化直观地展示给用户。下面是一些输入下展示的风险情况：
+
+- 高风险：
+
+<img src="web-1.png" style="zoom: 67%;" />
+
+- 中等风险：
+
+<img src="web-2.png" style="zoom:67%;" />
+
+- 低风险：
+
+<img src="web-3.png" alt="image-20200806005759625" style="zoom:67%;" />
 
 
 
 # 8. 结论与展望
 
-提交到kaggle后，获得xxx的分数
+在这个项目中，我们通过对数据特征进行分析、挖掘，并结合使用各种机器学习模型，设计、优化、测试了一个风险预估模型，并在 Kaggle 中获得了0.86849的得分，可以说是非常不错了。最后我们还尝试简单实现了模型的落地，让我们的模型拥有了实际应用的价值。
+
+整个项目让我们了解到了机器学习的基本流程，对金融科技、特征工程、大数据等有了基本的认知，也更对金融科技的未来充满向往。除了课程中所设计的大数据存储、机器学习方法、智能投顾等，许多其他技术诸如云计算、区块链等都能参与到 FinTech 的发展中，为金融科技的进一步发展添砖加瓦。
+
+技术服务于金融创新，而金融创新带来的红利又能进一步促进科技的进步。随着持续的资金、关注和支持，金融科技在未来三年会有怎样的发展？我们非常期待。
 
 
 
 # 9. 参考文献
 
-pycaret牛逼
+- 
