@@ -2,6 +2,8 @@
 
 ---
 
+[TOC]
+
 # 1. 选题
 
 本次大作业我们的选题是风险控制，需要针对一个金融科技中的风险控制场景，设计一个新模型，完成分析与报告。初次之外，我们尝试实现了模型的落地，编写了一个简易的前端，能够实时针对给出的客户数据进行风险评估，从而让模型产生实际的意义。
@@ -400,4 +402,9 @@ with open('AdaBoostClassifier.js', 'w') as f:
 
 # 9. 参考文献
 
-- 
+1. PyCaret:  An open source low-code machine learning library. [https://pycaret.org/](https://pycaret.org/)
+2. scikit-learn: Machine Learning in Python. [https://scikit-learn.org/](https://scikit-learn.org/)
+3. sklearn-porter: Transpile trained scikit-learn estimators to C, Java, JavaScript and others. [https://github.com/nok/sklearn-porter](https://github.com/nok/sklearn-porter)
+4. 央行万字长文披露《金融科技（FinTech）发展规划》 [https://finance.qq.com/a/20190823/008846.htm](https://finance.qq.com/a/20190823/008846.htm)
+5. 
+
