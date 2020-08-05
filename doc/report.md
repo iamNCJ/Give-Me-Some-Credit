@@ -281,7 +281,7 @@ plot_model(top5[0], plot='feature')
 
 ![](important_feature.png)
 
-可见 `Debt Ratio`, `age`, `Revolving Utilization Of Unsecured Lines` 等特征较为重要。
+可见 `Debt Ratio`, `age`, `Revolving Utilization Of Unsecured Lines` 等特征的权重较大。
 
 ## 7.6 解释模型
 
@@ -297,13 +297,21 @@ interpret_model(tuned_top5[1])
 
 ![](shap-features.png)
 
+这张图反应了不同特征上每一个样本的特征值对于模型输出的贡献。一般来说，区分度越好（即聚集现象越少）的特征，效果会比较好。
 
+那么这里就得到了一个与前面特征重要性差别较大的结论了，可以注意到不少特征比如age、debt retio，虽然权重较大，但是SHAP值分析中的聚集现象也非常严重。可能是因为区分度高的特征并不需要很大的权重就可以将不同的样本区分开、而区分度较低的特征为了能够对最终结果产生影响可能会需要更大的权重，同时也说明，相比权重而言，SHAP 这种基于博弈论的分析方法对于模型的解释可能有着更好的效果。
 
 ### 7.6.2 SHAP 单个样本解释
 
+使用 `interpret_model()` 方法来对单个样本的输出进行解释。在这里我们随机选取的是10号样本，根据数据集这是一个阴性样本。
 
+```python
+interpret_model(tuned_top5[1], plot='reason', observation=10)
+```
 
 ![](shap-single.png)
+
+从图中可以看到它的每一个特征对于最终的结果产生了怎样的效果。可能对于生成针对单个客户的分析报告等会有较大帮助。
 
 ## 7.7 进行预测
 
