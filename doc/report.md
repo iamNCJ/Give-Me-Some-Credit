@@ -236,19 +236,97 @@ final_clf = finalize_model(best)
 
 为了对我们获得的模型有一个直观、感性的认识，我们对模型进行可视化。
 
-### 7.5.1 AUC 曲线
+### 7.5.1 模型结构
+
+首先，我们将模型打印一下，看看其结构。
+
+```python
+final_clf
+
+CalibratedClassifierCV(base_estimator=BaggingClassifier(base_estimator=<catboost.core.CatBoostClassifier object at 0x7f8526c65630>,
+                                                        bootstrap=True,
+                                                        bootstrap_features=False,
+                                                        max_features=1.0,
+                                                        max_samples=1.0,
+                                                        n_estimators=10,
+                                                        n_jobs=-1,
+                                                        oob_score=False,
+                                                        random_state=1559,
+                                                        verbose=0,
+                                                        warm_start=False),
+                       cv=10, method='sigmoid')
+```
+
+可以看到这是一个三层嵌套的模型，最外部为一个 `CalibratedClassifierCV` 校准模型，内部是一个集成学习的 `BaggingClassifier` ，最底层是 `CatBoostClassifier` 。
+
+### 7.5.2 AUC 曲线
+
+使用 `plot_model(final_best, plot='auc')` 可以很方便的获取 AUC 曲线图。
+
+![](auc.png)
+
+可以看出在已知数据集上，我们的AUC达到了0.88，属于相当不错的效果。
+
+### 7.5.3 特征重要性
+
+另一个需要可视化的重要属性就是模型中的各个特征所占的权重。
+
+不过因为我们的最终模型是一个嵌套模型，已经无法直接得到各个特征所占的权重，因此我们选取中间的一些简化模型来进行可视化，主要是最底层作为基础模型的那些。
+
+将重要特征进行可视化的方式也很简单。
+
+```python
+plot_model(top5[0], plot='feature')
+```
+
+![](important_feature.png)
+
+可见 `Debt Ratio`, `age`, `Revolving Utilization Of Unsecured Lines` 等特征较为重要。
+
+## 7.6 解释模型
+
+对于金融科技的模型，我们希望它不只是黑盒，而是有着实际意义的可解释模型。为此，我们使用夏普利值 Shapley Values (SHAP) 来评价树模型中的特征对于结果的贡献度，这样会比单纯看特征重要性更具有指导意义。
+
+### 7.6.1 SHAP 特征解释
+
+使用 `interpret_model()` 方法来对模型的特征进行解释。
+
+```python
+interpret_model(tuned_top5[1])
+```
+
+![](shap-features.png)
 
 
 
-### 7.5.2 特征重要性
+### 7.6.2 SHAP 单个样本解释
 
 
 
-## 7.6 进行预测
+![](shap-single.png)
 
+## 7.7 进行预测
 
+最后我们使用最终版的模型进行预测，输出每一个测试样本的概率值，并上传结果到 Kaggle 进行评测。
 
-## 7.7 模型部署
+```python
+# prediction
+test_data = pd.read_csv('data/cs-test.csv')
+predictions = predict_model(final_clf, data=test_data)
+import numpy as np
+submission_scores = predictions['Score']
+ids = np.arange(1, 101504)
+submission = pd.DataFrame( {'Id': ids, 'Probability': submission_scores})
+submission.to_csv('submission_pycaret_automl.csv', index=False)
+```
+
+将 `submission_pycaret_automl.csv` 上传，查看得分：
+
+![](score.png)
+
+非公开数据集 AUC 为0.86849，公开数据集 AUC 0.86253，榜首的得分是 0.86955（非公开）和 0.86390（公开），可以看出我们的模型效果还是很不错的。
+
+## 7.8 模型部署
 
 Vue sklearn-porter
 
