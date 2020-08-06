@@ -6,8 +6,9 @@ Kaggle - Give Me Some Credit
 
 - Modeling (inside `/model`)
 
-    - Python & sklearn
+    - Python & PyCaret
 
 - Web Frontend (inside `frontend-demo`)
 
     - Vue & Vuetify
+    - sklearn-porter
