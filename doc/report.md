@@ -25,15 +25,39 @@
 
 # 2. 研究背景与意义
 
+Give Me Some Credit是2011年9月在Kaggle上举办的一个特征预测比赛，它给出了25万名借款人的历史数据，参赛者需要预测特定的借款人在接下来的两年内是否会遇到经济压力导致无法偿还借款。
 
+本次比赛的主题为风险控制，所谓风险控制，就是评估用户可能违约的情况，降低金融风险。传统的风控技术依赖有经验的风险分析专家设计信用判断条件，或依赖回归分析等统计技术。而随着客户数目的增多，风险评估的人力成本上升，且随着大数据时代的到来，大量的数据可以被计算机有效的分析，因此利用机器学习等手段的风控技术得到了推广，本次比赛正是在此背景下举办的一场机器学习风控比赛。
+
+机器学习技术的引入能够多维地评价用户的信用等级，从而降低风险等级，同时节省了评估成本，因而具有重要的意义。
 
 # 3. 国内外研究现状与存在问题
 
+Give Me Some Credit比赛已于2011年12月结束，根据Kaggle公布的数据，目前公开排行榜前三名队伍模型的AUC值分别为0.86390、0.86370以及0.86364；私人排行榜前三名队伍模型的AUC值分别为0.86955、0.86929以及0.86928 。
 
+围绕信用风险控制人们进行了许多研究，传统的风险控制方法采用线性、对数以及概率回归的方式对信用风险进行建模[1]，但出于传统风控手段不完善的原因，人们逐渐转向使用机器学习技术设计风控模型，1994年Altman等首次对传统的统计方法和神经网络算法在破产预测方面进行了比较分析，并发现二者的结合可以显著提升准确率[2]。评估信用风险复杂性的增加为机器学习打开了大门，Son等人使用2001年1月至2014年2月不同期限和不同评级组的每日CDS证明涉及深度学习的非参数机器学习模型在预测准确性以及提出实用对冲措施方面优于传统基准模型[3]。
+
+消费者贷款和中小企业贷款领域涉及大量潜在数据，因而越来越依赖机器学习技术做出更优的贷款决策。在消费者贷款方面，Khandani等人提出了一种基于决策树和支持向量机的模型，对实际贷款数据的测试结果表明该模型可节省高达25％的成本[4]。Figini等人表明，使用UniCredit Bank数据集训练的多变量离群检测技术改善了中小企业贷款的信用风险预测结果[5]。
+
+有关风险控制和机器学习的领域仍然有很多待解决的问题。例如，预测准确率不足导致完全信任机器学习模型可能导致更高的风险，2012年骑士资本的案例就说明了这一点，他们采用的股票自动交易系统在短短45分钟内就亏损了4.4亿美元。出于对机器学习模型的不完全信任，企业或银行不得不投入人力对其进行监督，导致额外的开销。另一个问题是深度学习的不透明，深度神经网络的隐藏层类似于一个黑箱，导致模型缺乏可解释性，不利于有效的风险监督，并且可能导致监管合规性等问题。
 
 # 4. 研究目标与研究内容
 
+本项目的研究目标为：
 
+- 对数据集进行可视化分析，了解特征与标签之间的关系，并对数据集进行特征工程处理；
+- 对比逻辑回归、SVM、随机森林、决策树等多种预测模型，比较其准确率、召回率、AUC等多个指标；
+- 选择效果较好的模型进行进一步的优化，最终模型具有较高的预测准确率，AUC达到0.8以上；
+- 制作一个基于Web UI的风控产品Demo，通过用户输入的特征数据预测其风险指数。
+
+本项目的研究内容为：
+
+- 引入数据集，分析特征变量的类型、缺失值情况、相关性等；
+- 对数据集进行特征处理，填充缺失值、对样本进行欠采样和过采样、划分训练集和测试集等；
+- 对几个备选模型进行基准测试，比较其各项指标，选择效果较好的5个模型进行调优；
+- 使用机器学习框架进行模型参数调优，并对调优后的5个模型进行集成学习，最后将其混合，综合5个模型的预测结果产生最终预测结果；
+- 对模型进行可视化分析，分析各特征变量对预测结果的贡献度；
+- 将模型迁移到Web UI，实现交互式风控预测产品Demo。
 
 # 5. 研究方法与模型思路
 
@@ -434,12 +458,28 @@ with open('AdaBoostClassifier.js', 'w') as f:
 
 # 9. 参考文献
 
-1. PyCaret:  An open source low-code machine learning library. [https://pycaret.org/](https://pycaret.org/)
-2. scikit-learn: Machine Learning in Python. [https://scikit-learn.org/](https://scikit-learn.org/)
-3. sklearn-porter: Transpile trained scikit-learn estimators to C, Java, JavaScript and others. [https://github.com/nok/sklearn-porter](https://github.com/nok/sklearn-porter)
-4. 央行万字长文披露《金融科技（FinTech）发展规划》 [https://finance.qq.com/a/20190823/008846.htm](https://finance.qq.com/a/20190823/008846.htm)
-5. Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
-6. Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
-7. Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
-8. Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
+[1] Altman, E. I. (1968). Financial ratios, discriminant analysis and the prediction of corporate bankruptcy. *The Journal of Finance*, 23(4), 589–609.
 
+[2] Altman, E. I., Marco, G., & Varetto, F. (1994). Corporate distress diagnosis: Comparisons using linear discriminant analysis and neural networks (the Italian experience). *Journal of Banking & Finance*, 18(3), 505–529.
+
+[3] Son, Y., Byun, H., & Lee, J. (2016). Nonparametric machine learning models for predicting the credit default swaps: An empirical study. *Expert Systems with Applications*, 58, 210–220.
+
+[4] Khandani, A. E., Kim, A. J., & Lo, A. W. (2010). Consumer credit-risk models via machine-learning algorithms. *Journal of Banking & Finance*, 34(11), 2767–2787.
+
+[5] Figini, S., Bonelli, F., & Giovannini, E. (2017). Solvency prediction for small and medium enterprises in banking. *Decision Support Systems*, 102, 91–97.
+
+[6] Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
+
+[7] Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
+
+[8] Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
+
+[9] Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
+
+[10] PyCaret:  An open source low-code machine learning library. [https://pycaret.org/](https://pycaret.org/)
+
+[11] scikit-learn: Machine Learning in Python. [https://scikit-learn.org/](https://scikit-learn.org/)
+
+[12] sklearn-porter: Transpile trained scikit-learn estimators to C, Java, JavaScript and others. [https://github.com/nok/sklearn-porter](https://github.com/nok/sklearn-porter)
+
+[13] 央行万字长文披露《金融科技（FinTech）发展规划》 [https://finance.qq.com/a/20190823/008846.htm](https://finance.qq.com/a/20190823/008846.htm)
