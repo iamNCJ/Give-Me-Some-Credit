@@ -1,8 +1,23 @@
-<font size=10>风控项目实战之Give Me Some Credit - 金融科技大作业报告</font>
+<div align=center style="margin-top:18em;margin-bottom:15em;font-family:'Times','Times New Roman'">
+  <p style="font-size:2em">
+    <b>风控项目实战之 Give Me Some Credit</b>
+  </p>
+  <p style="font-size:1.5em">
+    <b>金融科技大作业报告</b>
+  </p>
+  <p style="margin-top:3em;font-size:1.3em;">
+    周浩洋
+  	曾充
+    <br/>
+    2020-08-02
+  </p>
+</div>
+<div style="page-break-after: always;"></div>
 
----
 
 [TOC]
+
+<div style="page-break-after: always;"></div>
 
 # 1. 选题
 
@@ -22,7 +37,22 @@
 
 # 5. 研究方法与模型思路
 
+## 5.1 研究方法
 
+1. 分析数据：我们的项目是基于数据进行的预测，因此数据是一切的基础。这包括对数据集进行分析，研究其样本组成、类别比例，并对数据进行简单的清洗，包括填充空值和处理类别失衡等。
+2. 初选模型：针对数据集的特征情况进行模型的初选，在大量模型上使用小规模数据进行基准测试，确定一批候选模型。
+3. 精细调节：针对各个模型在更大的数据集上，以提高 AUC 为目标进行精细调节，同时避免模型的过拟合，增强模型的泛化能力。
+4. 部署推广：模型在落地之前都是不能产生实际价值的，因此我们将尝试通过在 Web 网站中嵌入模型的方式，实现简单的模型部署落地，让我们的模型能够对实际情况给出指导意见。
+
+## 5.2 模型思路
+
+模型的选取主要有以下考量和思路：
+
+- 数据中的类别极不平衡，因此需要谨慎选择模型，并注意关注模型的泛化能力和 AUC ，不然容易出现模型全部预估某一类别的情况，导致模型失效
+- 模型不应过于复杂，否则容易出现过拟合的情况，并且部署成本会较高
+- 金融场景中的模型应当具有一定的可解释性，能够对某一具体案例给出评分和理由，而不能是单纯的黑箱
+
+基于以上思路，我们决定采用正则回归模型和集成模型，并在数据集上进行训练和调参，避免过拟合
 
 # 6. 数据集分析
 
@@ -50,14 +80,14 @@
 
 ## 6.2 类别数量情况
 
-首先将数据导入
+首先将数据导入。
 
 ```python
 import pandas as pd
 data = pd.read_csv('./data/cs-training.csv')
 ```
 
-通过 `seaborn` 可以绘制出两个类别的数量情况
+通过 `seaborn` 可以绘制出两个类别的数量情况。
 
 ```python
 plt.figure()
@@ -85,7 +115,7 @@ plt.savefig('heatmap')
 
 可以看出大部分特征之间是无关的，只有少数几个特征之间存在相关性，因此我们不对其进行单独的处理。
 
-## 6.4 数据准备工作
+## 6.4 数据准备工作与特征工程
 
 ### 6.4.1 数据预处理
 
@@ -114,7 +144,9 @@ clf1 = setup(data=data, target='SeriousDlqin2yrs', numeric_features=['NumberOfTi
 
 由此可见，对于我们的数据，不同的采样比例影响并不是很大。因此，我们直接采用 `pycaret` 的自动划分来帮我们针对不同模型进行划分和训练。
 
+### 6.4.3 组合特征
 
+在刚刚的分析中，我们发现我们的数据集特征之间相关性不大，并且特征数量不是很多，因此我们不需要进行组合特征等特征工程，只需要将数据交给模型即可。
 
 # 7. 实验与分析
 
@@ -392,7 +424,7 @@ with open('AdaBoostClassifier.js', 'w') as f:
 
 # 8. 结论与展望
 
-在这个项目中，我们通过对数据特征进行分析、挖掘，并结合使用各种机器学习模型，设计、优化、测试了一个风险预估模型，并在 Kaggle 中获得了0.86849的得分，可以说是非常不错了。最后我们还尝试简单实现了模型的落地，让我们的模型拥有了实际应用的价值。
+在这个项目中，我们通过对数据特征进行分析、挖掘、特征工程，并结合使用各种机器学习模型，设计、优化、测试了一个风险预估模型，并在 Kaggle 中获得了 0.86849 的得分，可以说是非常不错了。最后我们还尝试简单实现了模型的落地，让我们的模型拥有了实际应用的价值。
 
 整个项目让我们了解到了机器学习的基本流程，对金融科技、特征工程、大数据等有了基本的认知，也更对金融科技的未来充满向往。除了课程中所设计的大数据存储、机器学习方法、智能投顾等，许多其他技术诸如云计算、区块链等都能参与到 FinTech 的发展中，为金融科技的进一步发展添砖加瓦。
 
@@ -406,5 +438,8 @@ with open('AdaBoostClassifier.js', 'w') as f:
 2. scikit-learn: Machine Learning in Python. [https://scikit-learn.org/](https://scikit-learn.org/)
 3. sklearn-porter: Transpile trained scikit-learn estimators to C, Java, JavaScript and others. [https://github.com/nok/sklearn-porter](https://github.com/nok/sklearn-porter)
 4. 央行万字长文披露《金融科技（FinTech）发展规划》 [https://finance.qq.com/a/20190823/008846.htm](https://finance.qq.com/a/20190823/008846.htm)
-5. 
+5. Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
+6. Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
+7. Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
+8. Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
 
