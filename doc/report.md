@@ -16,7 +16,11 @@ Give Me Some Credit是2011年9月在Kaggle上举办的一个特征预测比赛�
 
 Give Me Some Credit比赛已于2011年12月结束，根据Kaggle公布的数据，目前公开排行榜前三名队伍模型的AUC值分别为0.86390、0.86370以及0.86364；私人排行榜前三名队伍模型的AUC值分别为0.86955、0.86929以及0.86928 。
 
-参赛队伍的成绩区分度不高，公开排行榜约83%的参赛队伍模型的AUC值均在0.8以上，同时最高分数也没有超过0.9，这说明设计一个较为优秀的模型的难度不大，但由于数据集的性质导致预测准确率无法达到很高的水平。
+围绕信用风险控制人们进行了许多研究，传统的风险控制方法采用线性、对数以及概率回归的方式对信用风险进行建模[1]，但出于传统风控手段不完善的原因，人们逐渐转向使用机器学习技术设计风控模型，1994年Altman等首次对传统的统计方法和神经网络算法在破产预测方面进行了比较分析，并发现二者的结合可以显著提升准确率[2]。评估信用风险复杂性的增加为机器学习打开了大门，Son等人使用2001年1月至2014年2月不同期限和不同评级组的每日CDS证明涉及深度学习的非参数机器学习模型在预测准确性以及提出实用对冲措施方面优于传统基准模型[3]。
+
+消费者贷款和中小企业贷款领域涉及大量潜在数据，因而越来越依赖机器学习技术做出更优的贷款决策。在消费者贷款方面，Khandani等人提出了一种基于决策树和支持向量机的模型，对实际贷款数据的测试结果表明该模型可节省高达25％的成本[4]。Figini等人表明，使用UniCredit Bank数据集训练的多变量离群检测技术改善了中小企业贷款的信用风险预测结果[5]。
+
+有关风险控制和机器学习的领域仍然有很多待解决的问题。例如，预测准确率不足导致完全信任机器学习模型可能导致更高的风险，2012年骑士资本的案例就说明了这一点，他们采用的股票自动交易系统在短短45分钟内就亏损了4.4亿美元。出于对机器学习模型的不完全信任，企业或银行不得不投入人力对其进行监督，导致额外的开销。另一个问题是深度学习的不透明，深度神经网络的隐藏层类似于一个黑箱，导致模型缺乏可解释性，不利于有效的风险监督，并且可能导致监管合规性等问题。
 
 ## 4. 研究目标与研究内容
 
@@ -128,10 +132,20 @@ Give Me Some Credit比赛已于2011年12月结束，根据Kaggle公布的数据�
 
 ## 9. 参考文献
 
-Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
+[1] Altman, E. I. (1968). Financial ratios, discriminant analysis and the prediction of corporate bankruptcy. *The Journal of Finance*, 23(4), 589–609.
 
-Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
+[2] Altman, E. I., Marco, G., & Varetto, F. (1994). Corporate distress diagnosis: Comparisons using linear discriminant analysis and neural networks (the Italian experience). *Journal of Banking & Finance*, 18(3), 505–529.
 
-Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
+[3] Son, Y., Byun, H., & Lee, J. (2016). Nonparametric machine learning models for predicting the credit default swaps: An empirical study. *Expert Systems with Applications*, 58, 210–220.
 
-Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
+[4] Khandani, A. E., Kim, A. J., & Lo, A. W. (2010). Consumer credit-risk models via machine-learning algorithms. *Journal of Banking & Finance*, 34(11), 2767–2787.
+
+[5] Figini, S., Bonelli, F., & Giovannini, E. (2017). Solvency prediction for small and medium enterprises in banking. *Decision Support Systems*, 102, 91–97.
+
+[6] Weiming, J., n.d. *Mastering Python For Finance - Second Edition*.
+
+[7] Sun, J., Jia, M. Y., & Li, H. (2011). AdaBoost ensemble for financial distress prediction: An empirical comparison with data from Chinese listed companies. *Expert Systems with Applications*, *38*(8), 9305-9312.
+
+[8] Aziz S., Dowling M. (2019) Machine Learning and AI for Risk Management. In: Lynn T., Mooney J., Rosati P., Cummins M. (eds) Disrupting Finance. Palgrave Studies in Digital Business & Enabling Technologies. Palgrave Pivot, Cham
+
+[9] Leo, M., Sharma, S., & Maddulety, K. (2019). Machine learning in banking risk management: A literature review. *Risks*, *7*(1), 29.
