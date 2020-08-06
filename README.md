@@ -6,7 +6,7 @@ Kaggle - Give Me Some Credit
 
 - Modeling (inside `/model`)
 
-    - Python & pycaret
+    - Python & PyCaret
 
 - Web Frontend (inside `frontend-demo`)
 
