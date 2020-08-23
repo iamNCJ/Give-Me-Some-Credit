@@ -8,7 +8,7 @@ Kaggle - Give Me Some Credit
 
     - Python & PyCaret
 
-- Web Frontend (inside `frontend-demo`)
+- Web Frontend (inside `/frontend-demo`)
 
     - Vue & Vuetify
     - sklearn-porter
