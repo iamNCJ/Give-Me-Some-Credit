@@ -12,3 +12,4 @@ Kaggle - Give Me Some Credit
 
     - Vue & Vuetify
     - sklearn-porter
+    - Demo at [https://iamncj.github.io/Give-Me-Some-Credit/](https://iamncj.github.io/Give-Me-Some-Credit/)
