@@ -1,7 +1,1 @@
-.idea
-conda-env/
-model/catboost_info/
-*.pkl
-model/cb_model.json
-model/mlruns/.trash/
 .DS_Store
